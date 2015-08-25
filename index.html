@@ -1,0 +1,73 @@
+<table class="outer">
+	<tr class="outer">
+		<th class="outer"><h3>Matriz 1</h3></th>
+		<th class="outer"><h3>Matriz 2</h3></th>
+	</tr>
+	<tr class="outer"  style = "display : none">
+		<td>
+			<center>
+				<table id = "tabela_matriz_1" style = "display:none;"></table>
+			</center>
+		</td>
+		<td>
+			<center>
+				<table id = "tabela_matriz_2" style = "display:none;"></table>
+			</center>
+		</td>
+	</tr>
+	<tr class="outer">
+		<td class = "outer">
+			<!--<center>-->
+				<br>
+				<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;">
+				<button onclick = "changeTableSize('1');">Alterar</button>
+			<!--</center>-->
+		</td>
+		<td class = "outer">
+			<!--<center>-->
+				<br>
+				<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;">
+				<button onclick = "changeTableSize('2');">Alterar</button>
+			<!--</center>-->
+		</td>
+	</tr>
+</table>
+
+<style>
+.outer,table{
+	border : none;
+	padding : 0 0 0 0;
+	margin : 0 0 0 0;
+	background-color : #FFF;
+}
+table.outer
+{
+	background-color : #000;
+}
+</style>
+
+<script>
+function changeTableSize(id)
+{
+	var i_m = 2;
+	var j_m = parseInt(document.getElementById("coluna_amount_" + id).value);
+	if(j_m > 0 && i_m > 0)
+	{
+		var t = document.getElementById("tabela_matriz_" + id);
+		t.style.display = "block";
+		t.parentElement.parentElement.parentElement.style.display = "";
+		t.innerHTML = "";
+		var t_t = "";
+		for(var i = 0; i< i_m; i++)
+		{
+			t_t += "<tr>";
+			for(var j = 0; j< j_m; j++)
+			{
+				t_t += "<td> <input style = 'width:32;'> </td>";
+			}
+			t_t += "</tr>";
+		}
+		t.innerHTML = t_t;
+	}
+}
+</script>
