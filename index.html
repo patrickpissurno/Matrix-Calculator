@@ -2,6 +2,7 @@
 	<tr class="outer">
 		<th class="outer"><h3>Matriz 1</h3></th>
 		<th class="outer"><h3>Matriz 2</h3></th>
+		<th class="outer"><h3>Resultado</h3></th>
 	</tr>
 	<tr class="outer"  style = "display : none">
 		<td>
@@ -14,24 +15,35 @@
 				<table id = "tabela_matriz_2" style = "display:none;"></table>
 			</center>
 		</td>
+		<td>
+			<center>
+				<table id = "tabela_matriz_3" style = "display:none;"></table>
+			</center>
+		</td>
 	</tr>
 	<tr class="outer">
 		<td class = "outer">
 			<!--<center>-->
 				<br>
-				<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;">
-				<button onclick = "changeTableSize('1');">Alterar</button>
+				<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
+				<button onclick = "alterTable('1');">Alterar</button>
 			<!--</center>-->
 		</td>
 		<td class = "outer">
 			<!--<center>-->
 				<br>
-				<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;">
-				<button onclick = "changeTableSize('2');">Alterar</button>
+				<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
+				<button onclick = "alterTable('2');">Alterar</button>
 			<!--</center>-->
+		</td>
+		<td class = "outer">
+			<canvas id="display">
+			</canvas>
 		</td>
 	</tr>
 </table>
+<button onclick = "sum();">Somar</button>
+<button onclick = "sub();">Subtrair</button>
 
 <style>
 .outer,table{
@@ -47,10 +59,112 @@ table.outer
 </style>
 
 <script>
-function changeTableSize(id)
+var matrix_size = function(width,height)
+{
+	this.width = width;
+	this.height = height;
+}
+
+var Point = function(x,y){this.x = x; this.y = y};
+
+var m1 = new matrix_size(0,0);
+var m2 = new matrix_size(0,0);
+
+var canvas = document.getElementById("display");
+var ctx = canvas.getContext("2d");
+
+function sum()
+{
+	var t1 = document.getElementById("tabela_matriz_1");
+	var t2 = document.getElementById("tabela_matriz_2");
+	var t3 = document.getElementById("tabela_matriz_3");
+	if(m1.width != 0 && m1.height != 0 && m1.width == m2.width && m1.height == m2.height)
+	{
+		replaceNulls('1');
+		replaceNulls('2');
+		changeTableSize('3',m1);
+		
+		//sum
+		var count = m1.width * m1.height;
+		for(var i=0; i<count; i++)
+		{
+			var _td1 = document.getElementById("t_1_" + i);
+			var _td2 = document.getElementById("t_2_" + i);
+			var _td3 = document.getElementById("t_3_" + i);
+			_td3.value = parseInt(_td1.value) + parseInt(_td2.value);
+		}
+	}
+	else
+		err("O tamanho das matrizes precisa ser o mesmo para somar");
+}
+
+function sub()
+{
+	var t1 = document.getElementById("tabela_matriz_1");
+	var t2 = document.getElementById("tabela_matriz_2");
+	var t3 = document.getElementById("tabela_matriz_3");
+	if(m1.width != 0 && m1.height != 0 && m1.width == m2.width && m1.height == m2.height)
+	{
+		replaceNulls('1');
+		replaceNulls('2');
+		changeTableSize('3',m1);
+		
+		//sum
+		var count = m1.width * m1.height;
+		for(var i=0; i<count; i++)
+		{
+			var _td1 = document.getElementById("t_1_" + i);
+			var _td2 = document.getElementById("t_2_" + i);
+			var _td3 = document.getElementById("t_3_" + i);
+			_td3.value = parseInt(_td1.value) - parseInt(_td2.value);
+		}
+	}
+	else
+		err("O tamanho das matrizes precisa ser o mesmo para somar");
+}
+
+function err(str)
+{
+	//error
+	console.log(str);
+}
+
+function replaceNulls(id)
+{
+	var t_size = parseInt(id) == 1 ? m1 : m2;
+	var count = t_size.width * t_size.height;
+	for(var i=0; i<count; i++)
+	{
+		var _input = document.getElementById("t_" + id + "_" + i);
+		if(_input.value == "")
+			_input.value = "0";
+	}
+}
+
+function alterTable(id)
 {
 	var i_m = 2;
 	var j_m = parseInt(document.getElementById("coluna_amount_" + id).value);
+	if(j_m > 0 && i_m > 0)
+	{
+		switch(parseInt(id))
+		{
+			case 1:
+				m1 = new matrix_size(i_m,j_m);
+				break;
+			case 2:
+				m2 = new matrix_size(i_m,j_m);
+				break;
+		}			
+		changeTableSize(id, new matrix_size(i_m, j_m));
+	}
+}
+
+function changeTableSize(id,size)
+{
+	var i_m = size.width;
+	var j_m = size.height;
+	var count = 0;
 	if(j_m > 0 && i_m > 0)
 	{
 		var t = document.getElementById("tabela_matriz_" + id);
@@ -63,11 +177,39 @@ function changeTableSize(id)
 			t_t += "<tr>";
 			for(var j = 0; j< j_m; j++)
 			{
-				t_t += "<td> <input style = 'width:32;'> </td>";
+				t_t += "<td> <input id='t_" + id + "_" + count + "' style = 'width:30;height:28;text-align:center;'> </td>";
+				//console.log(count);
+				count ++;
 			}
 			t_t += "</tr>";
 		}
 		t.innerHTML = t_t;
 	}
+}
+
+function DrawMatrix(id)
+{
+	replaceNulls("1");
+	var _x = ((m1.height - 1) * m1.width)-1;
+	var _y = (m1.height * m1.width)-1;
+	var lastPoint = new Point(parseInt(document.getElementById("t_" + id + "_" + _x).value),parseInt(document.getElementById("t_" + id + "_" + _y).value));
+	for(i = 0; i<m1.width+2; i++)
+	{
+		console.log("t_" + id + "_" + i);
+		console.log("t_" + id + "_" + (parseInt(i)+parseInt(m1.width)));
+		console.log("---------");
+		var x = parseInt(document.getElementById("t_" + id + "_" + i).value);
+		var y = parseInt(document.getElementById("t_" + id + "_" + (parseInt(i)+parseInt(m1.width))).value);
+		DrawLine(lastPoint, new Point(x,y));
+	}
+}
+
+function DrawLine(point1, point2)
+{
+	var scale_factor = 30;
+	ctx.beginPath();
+	ctx.moveTo(point1.x * scale_factor,point1.y * scale_factor);
+	ctx.lineTo(point2.x * scale_factor, point2.y * scale_factor);
+	ctx.stroke();
 }
 </script>
