@@ -1,8 +1,9 @@
+<div id = "err"></div><br>
 <table class="outer">
 	<tr class="outer">
-		<th class="outer"><h3>Matriz 1</h3></th>
-		<th class="outer"><h3>Matriz 2</h3></th>
-		<th class="outer"><h3>Resultado</h3></th>
+		<th class="outer"><h3 style="color:#F00">Matriz 1</h3></th>
+		<th class="outer"><h3 style="color:#00F">Matriz 2</h3></th>
+		<th class="outer"><h3 style="color:#0F0">Resultado</h3></th>
 	</tr>
 	<tr class="outer"  style = "display : none">
 		<td>
@@ -69,6 +70,7 @@ var Point = function(x,y){this.x = x; this.y = y};
 
 var m1 = new matrix_size(0,0);
 var m2 = new matrix_size(0,0);
+var m3 = new matrix_size(0,0);
 
 var canvas = document.getElementById("display");
 var ctx = canvas.getContext("2d");
@@ -85,14 +87,17 @@ function sum()
 		changeTableSize('3',m1);
 		
 		//sum
-		var count = m1.width * m1.height;
-		for(var i=0; i<count; i++)
+		for(var i=0; i<m1.width; i++)
 		{
-			var _td1 = document.getElementById("t_1_" + i);
-			var _td2 = document.getElementById("t_2_" + i);
-			var _td3 = document.getElementById("t_3_" + i);
-			_td3.value = parseInt(_td1.value) + parseInt(_td2.value);
+			for(var j=0; j<m1.height; j++)
+			{
+				var _td1 = document.getElementById("t_1_" + i + "_" + j);
+				var _td2 = document.getElementById("t_2_" + i + "_" + j);
+				var _td3 = document.getElementById("t_3_" + i + "_" + j);
+				_td3.value = parseInt(_td1.value) + parseInt(_td2.value);
+			}
 		}
+		DrawAllMatrix();
 	}
 	else
 		err("O tamanho das matrizes precisa ser o mesmo para somar");
@@ -110,14 +115,17 @@ function sub()
 		changeTableSize('3',m1);
 		
 		//sum
-		var count = m1.width * m1.height;
-		for(var i=0; i<count; i++)
+		for(var i=0; i<m1.width; i++)
 		{
-			var _td1 = document.getElementById("t_1_" + i);
-			var _td2 = document.getElementById("t_2_" + i);
-			var _td3 = document.getElementById("t_3_" + i);
-			_td3.value = parseInt(_td1.value) - parseInt(_td2.value);
+			for(var j=0; j<m1.height; j++)
+			{
+				var _td1 = document.getElementById("t_1_" + i + "_" + j);
+				var _td2 = document.getElementById("t_2_" + i + "_" + j);
+				var _td3 = document.getElementById("t_3_" + i + "_" + j);
+				_td3.value = parseInt(_td1.value) - parseInt(_td2.value);
+			}
 		}
+		DrawAllMatrix();
 	}
 	else
 		err("O tamanho das matrizes precisa ser o mesmo para somar");
@@ -127,17 +135,20 @@ function err(str)
 {
 	//error
 	console.log(str);
+	document.getElementById("err").innerText = str;
 }
 
 function replaceNulls(id)
 {
 	var t_size = parseInt(id) == 1 ? m1 : m2;
-	var count = t_size.width * t_size.height;
-	for(var i=0; i<count; i++)
+	for(var i=0; i<m1.width; i++)
 	{
-		var _input = document.getElementById("t_" + id + "_" + i);
-		if(_input.value == "")
-			_input.value = "0";
+		for(var j=0; j<m1.height; j++)
+		{
+			var _input = document.getElementById("t_" + id + "_" + i + "_" + j);
+			if(_input.value == "")
+				_input.value = "0";
+		}
 	}
 }
 
@@ -164,6 +175,8 @@ function changeTableSize(id,size)
 {
 	var i_m = size.width;
 	var j_m = size.height;
+	if(id + "" == "3")
+		m3 = size;
 	var count = 0;
 	if(j_m > 0 && i_m > 0)
 	{
@@ -177,8 +190,7 @@ function changeTableSize(id,size)
 			t_t += "<tr>";
 			for(var j = 0; j< j_m; j++)
 			{
-				t_t += "<td> <input id='t_" + id + "_" + count + "' style = 'width:30;height:28;text-align:center;'> </td>";
-				//console.log(count);
+				t_t += "<td> <input id='t_" + id + "_" + i + "_" + j + "' style = 'width:30;height:28;text-align:center;'> </td>";
 				count ++;
 			}
 			t_t += "</tr>";
@@ -187,29 +199,47 @@ function changeTableSize(id,size)
 	}
 }
 
-function DrawMatrix(id)
+function DrawAllMatrix()
 {
-	replaceNulls("1");
-	var _x = ((m1.height - 1) * m1.width)-1;
-	var _y = (m1.height * m1.width)-1;
-	var lastPoint = new Point(parseInt(document.getElementById("t_" + id + "_" + _x).value),parseInt(document.getElementById("t_" + id + "_" + _y).value));
-	for(i = 0; i<m1.width+2; i++)
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	DrawMatrix("1", "#F00");
+	DrawMatrix("2", "#00F");
+	DrawMatrix("3", "#0F0");
+}
+
+function DrawMatrix(id, color)
+{
+	replaceNulls(""+id);
+	switch(id+"")
 	{
-		console.log("t_" + id + "_" + i);
-		console.log("t_" + id + "_" + (parseInt(i)+parseInt(m1.width)));
-		console.log("---------");
-		var x = parseInt(document.getElementById("t_" + id + "_" + i).value);
-		var y = parseInt(document.getElementById("t_" + id + "_" + (parseInt(i)+parseInt(m1.width))).value);
-		DrawLine(lastPoint, new Point(x,y));
+		case "1":
+			_matrix = m1;
+			break;
+		case "2":
+			_matrix = m2;
+			break;
+		case "3":
+			_matrix = m3;
+			break;
+	}
+	var _j = _matrix.height-1;
+	var lastPoint = new Point(parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + _j).value),parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + _j).value));
+	for(var j=0; j<m1.height; j++)
+	{
+		var x = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + j).value);
+		var y = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + j).value);
+		DrawLine(lastPoint, new Point(x,y), color);
+		lastPoint = new Point(x,y);
 	}
 }
 
-function DrawLine(point1, point2)
+function DrawLine(point1, point2, color)
 {
 	var scale_factor = 30;
 	ctx.beginPath();
 	ctx.moveTo(point1.x * scale_factor,point1.y * scale_factor);
 	ctx.lineTo(point2.x * scale_factor, point2.y * scale_factor);
+	ctx.strokeStyle = color;
 	ctx.stroke();
 }
 </script>
