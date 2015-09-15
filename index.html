@@ -131,6 +131,34 @@ function sub()
 		err("O tamanho das matrizes precisa ser o mesmo para somar");
 }
 
+function mult()
+{
+	var t1 = document.getElementById("tabela_matriz_1");
+	var t2 = document.getElementById("tabela_matriz_2");
+	var t3 = document.getElementById("tabela_matriz_3");
+	if(m1.width != 0 && m1.height != 0 && m1.height == m2.width)
+	{
+		replaceNulls('1');
+		replaceNulls('2');
+		changeTableSize('3',new matrix_size(m1.width,m2.height));
+		
+		//multi
+			for(var i=0; i<m1.width; i++)
+			{
+				for(var j=0; j<m1.height; j++)
+				{
+					var _td1 = document.getElementById("t_1_" + i + "_" + j);
+					var _td2 = document.getElementById("t_2_" + j + "_" + i);
+					var _td3 = document.getElementById("t_3_" + i + "_" + j);
+					_td3.value = parseInt(_td1.value) - parseInt(_td2.value);
+				}
+			}
+		DrawAllMatrix();
+	}
+	else
+		err("O tamanho das matrizes precisa ser o mesmo para somar");
+}
+
 function err(str)
 {
 	//error
@@ -222,14 +250,17 @@ function DrawMatrix(id, color)
 			_matrix = m3;
 			break;
 	}
-	var _j = _matrix.height-1;
-	var lastPoint = new Point(parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + _j).value),parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + _j).value));
-	for(var j=0; j<m1.height; j++)
+	if(_matrix.width == 2)
 	{
-		var x = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + j).value);
-		var y = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + j).value);
-		DrawLine(lastPoint, new Point(x,y), color);
-		lastPoint = new Point(x,y);
+		var _j = _matrix.height-1;
+		var lastPoint = new Point(parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + _j).value),parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + _j).value));
+		for(var j=0; j<m1.height; j++)
+		{
+			var x = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + j).value);
+			var y = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + j).value);
+			DrawLine(lastPoint, new Point(x,y), color);
+			lastPoint = new Point(x,y);
+		}
 	}
 }
 
