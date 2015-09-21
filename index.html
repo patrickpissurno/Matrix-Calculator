@@ -24,18 +24,14 @@
 	</tr>
 	<tr class="outer">
 		<td class = "outer">
-			<!--<center>-->
-				<br>
-				<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
-				<button onclick = "alterTable('1');">Alterar</button>
-			<!--</center>-->
+			<br>
+			<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
+			<button onclick = "alterTable('1');">Alterar</button>
 		</td>
 		<td class = "outer">
-			<!--<center>-->
-				<br>
-				<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
-				<button onclick = "alterTable('2');">Alterar</button>
-			<!--</center>-->
+			<br>
+			<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
+			<button onclick = "alterTable('2');">Alterar</button>
 		</td>
 		<td class = "outer">
 			<canvas id="display">
@@ -43,8 +39,8 @@
 		</td>
 	</tr>
 </table>
-<button onclick = "sum();">Somar</button>
-<button onclick = "sub();">Subtrair</button>
+<button onclick = "sum();">Somar</button> <!-- Chama a função -->
+<button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
 
 <style>
 .outer,table{
@@ -62,41 +58,49 @@ table.outer
 <script>
 var matrix_size = function(width,height)
 {
-	this.width = width;
-	this.height = height;
+	this.width = width;	//linhas
+	this.height = height; //colunas
 }
 
-var Point = function(x,y){this.x = x; this.y = y};
+var Point = function(x,y){this.x = x; this.y = y}; //Point é um objeto que cotem um par de X e Y.
 
-var m1 = new matrix_size(0,0);
-var m2 = new matrix_size(0,0);
-var m3 = new matrix_size(0,0);
+//Define as variáveis que representam o tamanho das 3 matrizes
+var m1 = new matrix_size(0,0);	//Matriz 1
+var m2 = new matrix_size(0,0);	//Matriz 2
+var m3 = new matrix_size(0,0);	//Matriz Resultado
 
 var canvas = document.getElementById("display");
 var ctx = canvas.getContext("2d");
 
 function sum()
 {
-	var t1 = document.getElementById("tabela_matriz_1");
-	var t2 = document.getElementById("tabela_matriz_2");
-	var t3 = document.getElementById("tabela_matriz_3");
+	var t1 = document.getElementById("tabela_matriz_1");	//Pega o elemento do HTML que representa a matriz 1
+	var t2 = document.getElementById("tabela_matriz_2");	//Pega o elemento do HTML que representa a matriz 2
+	var t3 = document.getElementById("tabela_matriz_3");	//Pega o elemento do HTML que representa a matriz resultado
 	if(m1.width != 0 && m1.height != 0 && m1.width == m2.width && m1.height == m2.height)
 	{
+		//Preenche todos os espaços vazios com 0
 		replaceNulls('1');
 		replaceNulls('2');
+		
+		//Altera o tamanho da matriz de id 3 (resultado) para o mesmo da matriz 1
 		changeTableSize('3',m1);
 		
-		//sum
-		for(var i=0; i<m1.width; i++)
+		//soma
+		for(var i=0; i<m1.width; i++)	//i=0; i<linhas; i++
 		{
-			for(var j=0; j<m1.height; j++)
+			for(var j=0; j<m1.height; j++)	//j=0; j<colunas; j++
 			{
+				//Formatação dos IDs: t_IDdaMatriz_linha_coluna. Exemplo: t_1_1_2 (matriz 1, linha 1, coluna 2)
 				var _td1 = document.getElementById("t_1_" + i + "_" + j);
 				var _td2 = document.getElementById("t_2_" + i + "_" + j);
 				var _td3 = document.getElementById("t_3_" + i + "_" + j);
+				//Você pode acessar o valor e definir através da propriedade value. Atenção: o tipo é string, logo precisa usar parseInt para converter pra int
+				//antes de realizar operações
 				_td3.value = parseInt(_td1.value) + parseInt(_td2.value);
 			}
 		}
+		//Desenha todas as matrizes (quando possível).
 		DrawAllMatrix();
 	}
 	else
@@ -105,26 +109,33 @@ function sum()
 
 function sub()
 {
-	var t1 = document.getElementById("tabela_matriz_1");
-	var t2 = document.getElementById("tabela_matriz_2");
-	var t3 = document.getElementById("tabela_matriz_3");
+	var t1 = document.getElementById("tabela_matriz_1");	//Pega o elemento do HTML que representa a matriz 1
+	var t2 = document.getElementById("tabela_matriz_2");	//Pega o elemento do HTML que representa a matriz 2
+	var t3 = document.getElementById("tabela_matriz_3");	//Pega o elemento do HTML que representa a matriz resultado
 	if(m1.width != 0 && m1.height != 0 && m1.width == m2.width && m1.height == m2.height)
 	{
+		//Preenche todos os espaços vazios com 0
 		replaceNulls('1');
 		replaceNulls('2');
+		
+		//Altera o tamanho da matriz de id 3 (resultado) para o mesmo da matriz 1
 		changeTableSize('3',m1);
 		
-		//sum
-		for(var i=0; i<m1.width; i++)
+		//subtração
+		for(var i=0; i<m1.width; i++)	//i=0; i<linhas; i++
 		{
-			for(var j=0; j<m1.height; j++)
+			for(var j=0; j<m1.height; j++)	//j=0; j<colunas; j++
 			{
+				//Formatação dos IDs: t_IDdaMatriz_linha_coluna. Exemplo: t_1_1_2 (matriz 1, linha 1, coluna 2)
 				var _td1 = document.getElementById("t_1_" + i + "_" + j);
 				var _td2 = document.getElementById("t_2_" + i + "_" + j);
 				var _td3 = document.getElementById("t_3_" + i + "_" + j);
+				//Você pode acessar o valor e definir através da propriedade value. Atenção: o tipo é string, logo precisa usar parseInt para converter pra int
+				//antes de realizar operações
 				_td3.value = parseInt(_td1.value) - parseInt(_td2.value);
 			}
 		}
+		//Desenha todas as matrizes (quando possível).
 		DrawAllMatrix();
 	}
 	else
@@ -133,26 +144,19 @@ function sub()
 
 function mult()
 {
-	var t1 = document.getElementById("tabela_matriz_1");
-	var t2 = document.getElementById("tabela_matriz_2");
-	var t3 = document.getElementById("tabela_matriz_3");
+	var t1 = document.getElementById("tabela_matriz_1");	//Pega o elemento do HTML que representa a matriz 1
+	var t2 = document.getElementById("tabela_matriz_2");	//Pega o elemento do HTML que representa a matriz 2
+	var t3 = document.getElementById("tabela_matriz_3");	//Pega o elemento do HTML que representa a matriz resultado
 	if(m1.width != 0 && m1.height != 0 && m1.height == m2.width)
 	{
+		//Preenche todos os espaços vazios com 0
 		replaceNulls('1');
 		replaceNulls('2');
-		changeTableSize('3',new matrix_size(m1.width,m2.height));
 		
-		//multi
-			for(var i=0; i<m1.width; i++)
-			{
-				for(var j=0; j<m1.height; j++)
-				{
-					var _td1 = document.getElementById("t_1_" + i + "_" + j);
-					var _td2 = document.getElementById("t_2_" + j + "_" + i);
-					var _td3 = document.getElementById("t_3_" + i + "_" + j);
-					_td3.value = parseInt(_td1.value) - parseInt(_td2.value);
-				}
-			}
+		//Alterar o tamanho da matriz resultado (3)
+		//Fazer a lógica de multiplicação
+		
+		//Desenha todas as matrizes (quando possível).
 		DrawAllMatrix();
 	}
 	else
@@ -166,6 +170,7 @@ function err(str)
 	document.getElementById("err").innerText = str;
 }
 
+//Substitui todos os campos vazios por 0
 function replaceNulls(id)
 {
 	var t_size = parseInt(id) == 1 ? m1 : m2;
@@ -180,6 +185,7 @@ function replaceNulls(id)
 	}
 }
 
+//Função usada pelo botão de alterar o tamanho
 function alterTable(id)
 {
 	var i_m = 2;
@@ -199,6 +205,8 @@ function alterTable(id)
 	}
 }
 
+//Função para alterar o tamanho de uma tabela (<id da tabela>, <tamanho>). ID da tabela (1,2,3 -> matriz 1, matriz 2, matriz resultado).
+//Tamanho é um objeto do tipo matrix_size (new matrix_size(x,y)).
 function changeTableSize(id,size)
 {
 	var i_m = size.width;
@@ -227,6 +235,7 @@ function changeTableSize(id,size)
 	}
 }
 
+//Desenha todas as matrizes
 function DrawAllMatrix()
 {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -235,6 +244,8 @@ function DrawAllMatrix()
 	DrawMatrix("3", "#0F0");
 }
 
+
+//Desenha uma matriz. (<ID da matriz>,<cor>)
 function DrawMatrix(id, color)
 {
 	replaceNulls(""+id);
