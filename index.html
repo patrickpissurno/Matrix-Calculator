@@ -48,6 +48,10 @@
   <option value="1">Matriz 1</option>
   <option value="2">Matriz 2</option>
 </select><button onclick = "transp()">Transposta</button> <!-- Chama a função -->
+<select id="det_id">
+  <option value="1">Matriz 1</option>
+  <option value="2">Matriz 2</option>
+</select><button onclick = "det()">Determinante</button> <!-- Chama a função -->
 
 <style>
 .outer,table{
@@ -243,6 +247,62 @@ function transp()
 			err("O tamanho da matriz nao pode ser 0");
 	}
 }
+
+function det()
+{
+	var t1 = document.getElementById("tabela_matriz_1");	//Pega o elemento do HTML que representa a matriz 1
+	var t2 = document.getElementById("tabela_matriz_2");	//Pega o elemento do HTML que representa a matriz 2
+	var t3 = document.getElementById("tabela_matriz_3");	//Pega o elemento do HTML que representa a matriz resultado
+	var id = parseInt(document.getElementById("det_id").value);
+	if(id == 1 || id == 2)
+	{
+		var m = id == 1 ? m1 : m2;
+		if(m.width != 0 && m.height != 0 && m.width == m.height)
+		{
+			//Preenche todos os espaços vazios com 0
+			replaceNulls('1');
+			replaceNulls('2');
+			//Alterar o tamanho da matriz resultado (3)
+			changeTableSize('3', new matrix_size(1,1));
+			
+			switch(m.width)
+			{
+				case 1:
+					var b = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
+					document.getElementById("t_3_" + 0 + "_" + 0).value = b.value;
+					break;
+				case 2:
+					var a = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
+					var b = document.getElementById("t_" + id + "_" + 1 + "_" + 1);
+					var c = document.getElementById("t_" + id + "_" + 0 + "_" + 1);
+					var d = document.getElementById("t_" + id + "_" + 1 + "_" + 0);
+					document.getElementById("t_3_" + 0 + "_" + 0).value = parseInt(a.value) * parseInt(b.value) - parseInt(c.value) * parseInt(d.value);
+					break;
+				case 3:
+					var a11 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 0).value);
+					var a12 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 1).value);
+					var a13 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 2).value);
+					var a21 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 0).value);
+					var a22 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 1).value);
+					var a23 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 2).value);
+					var a31 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 0).value);
+					var a32 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 1).value);
+					var a33 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 2).value);
+					document.getElementById("t_3_" + 0 + "_" + 0).value = (a11 * a22 * a33 + a12 * a23 * a31 + a13 * a21 * a32) - (a13 * a22 * a31 + a11 * a23 * a32 + a12 * a21 * a33);
+					break;
+				default:
+					err("Nao e possivel calcular determinantes de matrizes com tamanho superior a 3x3");
+					document.getElementById("t_3_" + 0 + "_" + 0).value = "ERR";
+					break;
+			}
+			DrawAllMatrix();
+		}
+		else
+			err("O tamanho da matriz nao pode ser 0");
+	}
+}
+
+
 
 function err(str)
 {
