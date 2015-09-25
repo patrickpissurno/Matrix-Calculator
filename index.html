@@ -44,7 +44,10 @@
 <button onclick = "sum();">Somar</button> <!-- Chama a função -->
 <button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
 <button onclick = "if(m1.width==1 && m1.height == 1){multE();}else{mult();}">Multiplicar</button> <!-- Chama a função -->
-
+<select id="transposta_id">
+  <option value="1">Matriz 1</option>
+  <option value="2">Matriz 2</option>
+</select><button onclick = "transp()">Transposta</button> <!-- Chama a função -->
 
 <style>
 .outer,table{
@@ -208,6 +211,37 @@ function multE()
 	}
 	else
 		err("O numero de colunas da primeira precisa ser igual ao de linhas da segunda");
+}
+
+function transp()
+{
+	var t1 = document.getElementById("tabela_matriz_1");	//Pega o elemento do HTML que representa a matriz 1
+	var t2 = document.getElementById("tabela_matriz_2");	//Pega o elemento do HTML que representa a matriz 2
+	var t3 = document.getElementById("tabela_matriz_3");	//Pega o elemento do HTML que representa a matriz resultado
+	var id = parseInt(document.getElementById("transposta_id").value);
+	if(id == 1 || id == 2)
+	{
+		if((id == 1 && m1.width != 0 && m1.height != 0)||(id == 2 && m2.width != 0 && m2.height != 0))
+		{
+			//Preenche todos os espaços vazios com 0
+			replaceNulls('1');
+			replaceNulls('2');
+			//Alterar o tamanho da matriz resultado (3)
+			changeTableSize('3',id == 1 ? m1 : m2);
+			for(var i=0; i<(id == 1 ? m1 : m2).width; i++)	//i=0; i<linhas; i++
+			{
+				for(var j=0; j<(id == 1 ? m1 : m2).height; j++)	//z=0; i<linhas; z++
+				{
+					var b = document.getElementById("t_" + id + "_" + i + "_" + j);
+					document.getElementById("t_3_" + j + "_" + i).value = b.value;
+				}
+			}
+			//Desenha todas as matrizes (quando possível).
+			DrawAllMatrix();
+		}
+		else
+			err("O tamanho da matriz nao pode ser 0");
+	}
 }
 
 function err(str)
