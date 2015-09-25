@@ -43,7 +43,7 @@
 </table>
 <button onclick = "sum();">Somar</button> <!-- Chama a função -->
 <button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
-<button onclick = "mult();">Subtrair</button> <!-- Chama a função -->
+<button onclick = "if(m1.width==1 && m1.height == 1){multE();}else{mult();}">Multiplicar</button> <!-- Chama a função -->
 
 
 <style>
@@ -178,7 +178,36 @@ function mult()
 		DrawAllMatrix();
 	}
 	else
-		err("O numero de colunas da primeira precisa ser igual ao da segunda");
+		err("O numero de colunas da primeira precisa ser igual ao de linhas da segunda");
+}
+
+function multE()
+{
+	var t1 = document.getElementById("tabela_matriz_1");	//Pega o elemento do HTML que representa a matriz 1
+	var t2 = document.getElementById("tabela_matriz_2");	//Pega o elemento do HTML que representa a matriz 2
+	var t3 = document.getElementById("tabela_matriz_3");	//Pega o elemento do HTML que representa a matriz resultado
+	if(m1.width != 0 && m1.height != 0 && m1.height == 1 && m1.width == 1)
+	{
+		//Preenche todos os espaços vazios com 0
+		replaceNulls('1');
+		replaceNulls('2');
+		//Alterar o tamanho da matriz resultado (3)
+		changeTableSize('3',m2);
+		//Fazer a lógica de multiplicação
+		var a = document.getElementById("t_1_" + 0 + "_" + 0);
+		for(var i=0; i<m2.width; i++)	//i=0; i<linhas; i++
+		{
+			for(var j=0; j<m2.height; j++)	//z=0; i<linhas; z++
+			{
+				var b = document.getElementById("t_2_" + i + "_" + j);
+				document.getElementById("t_3_" + i + "_" + j).value = a.value * b.value;
+			}
+		}
+		//Desenha todas as matrizes (quando possível).
+		DrawAllMatrix();
+	}
+	else
+		err("O numero de colunas da primeira precisa ser igual ao de linhas da segunda");
 }
 
 function err(str)
@@ -260,6 +289,7 @@ function changeTableSize(id,size)
 //Desenha todas as matrizes
 function DrawAllMatrix()
 {
+	err("");
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	DrawMatrix("1", "#F00");
 	DrawMatrix("2", "#00F");
