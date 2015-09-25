@@ -154,13 +154,12 @@ function mult()
 		//Preenche todos os espaços vazios com 0
 		replaceNulls('1');
 		replaceNulls('2');
-		
 		//Alterar o tamanho da matriz resultado (3)
 		changeTableSize('3',new matrix_size(m1.width,m2.height));
 		//Fazer a lógica de multiplicação
 		for(var i=0; i<m1.width; i++)	//i=0; i<linhas; i++
 		{
-			for(var z=0; z<m1.width; z++)	//z=0; i<linhas; z++
+			for(var z=0; z<m2.height; z++)	//z=0; i<linhas; z++
 			{
 				var sum = 0;
 				for(var j=0; j<m1.height; j++)	//j=0; j<colunas; j++
@@ -177,7 +176,7 @@ function mult()
 		DrawAllMatrix();
 	}
 	else
-		err("O tamanho das matrizes precisa ser o mesmo para somar");
+		err("O numero de colunas da primeira precisa ser igual ao da segunda");
 }
 
 function err(str)
@@ -191,9 +190,9 @@ function err(str)
 function replaceNulls(id)
 {
 	var t_size = parseInt(id) == 1 ? m1 : m2;
-	for(var i=0; i<m1.width; i++)
+	for(var i=0; i<t_size.width; i++)
 	{
-		for(var j=0; j<m1.height; j++)
+		for(var j=0; j<t_size.height; j++)
 		{
 			var _input = document.getElementById("t_" + id + "_" + i + "_" + j);
 			if(_input.value == "")
