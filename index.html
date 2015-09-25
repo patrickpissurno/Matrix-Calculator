@@ -41,6 +41,8 @@
 </table>
 <button onclick = "sum();">Somar</button> <!-- Chama a função -->
 <button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
+<button onclick = "mult();">Subtrair</button> <!-- Chama a função -->
+
 
 <style>
 .outer,table{
@@ -154,7 +156,22 @@ function mult()
 		replaceNulls('2');
 		
 		//Alterar o tamanho da matriz resultado (3)
+		changeTableSize('3',new matrix_size(m1.width,m2.height));
 		//Fazer a lógica de multiplicação
+		for(var i=0; i<m1.width; i++)	//i=0; i<linhas; i++
+		{
+			for(var z=0; z<m1.width; z++)	//z=0; i<linhas; z++
+			{
+				var sum = 0;
+				for(var j=0; j<m1.height; j++)	//j=0; j<colunas; j++
+				{
+					var a = document.getElementById("t_1_" + i + "_" + j);
+					var b = document.getElementById("t_2_" + j + "_" + z);
+					sum += parseInt(a.value) * parseInt(b.value);
+				}
+				document.getElementById("t_3_" + i + "_" + z).value = sum;
+			}
+		}
 		
 		//Desenha todas as matrizes (quando possível).
 		DrawAllMatrix();
