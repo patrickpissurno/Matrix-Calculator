@@ -294,9 +294,47 @@ function det()
 					var a33 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 2).value);
 					document.getElementById("t_3_" + 0 + "_" + 0).value = (a11 * a22 * a33 + a12 * a23 * a31 + a13 * a21 * a32) - (a13 * a22 * a31 + a11 * a23 * a32 + a12 * a21 * a33);
 					break;
-				default:
-					err("Nao e possivel calcular determinantes de matrizes com tamanho superior a 3x3");
-					document.getElementById("t_3_" + 0 + "_" + 0).value = "ERR";
+				default:					
+					var A = [];     //generates the array
+					for (var i = 0; i < m.width; i++)
+					{
+						A[i] = [];
+						for (var j = 0; j < m.height; j++)
+						{                       
+							A[i][j] =  i + ':' + j;             
+						}
+					}           
+
+					for (var i = 0; i < m.width; i++)
+					{  
+						//reads the array
+						for (var j=0; j<m.height; j++)
+						{
+							var _id = "t_" + id + "_" + i + "_" + j;
+							//console.log(_id);
+							A[i][j] = parseFloat(document.getElementById(_id).value);                                        
+						}
+					}
+					
+					function _det(M) {
+					   if (M.length==2) { return (M[0][0]*M[1][1])-(M[0][1]*M[1][0]); }
+					   var answer = 0;
+					   for (var i=0; i<M.length; i++) { answer += Math.pow(-1,i)*M[0][i]*_det(deleteRowAndColumn(M,i)); }
+					   return answer;
+					}
+
+					function deleteRowAndColumn(M,index) {
+					   var temp = [];
+					   // copy the array first
+					   for (var i=0; i<M.length; i++) { temp.push(M[i].slice(0)); } 
+					   // delete the first row
+					   temp.splice(0,1); 
+					   // delete the column at the index specified
+					   for (var i=0; i<temp.length; i++) { temp[i].splice(index,1); } 
+					   return temp;
+					}
+
+					document.getElementById("t_3_" + 0 + "_" + 0).value = _det(A);
 					break;
 			}
 			DrawAllMatrix();
