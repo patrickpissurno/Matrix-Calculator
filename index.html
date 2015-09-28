@@ -315,24 +315,6 @@ function det()
 							A[i][j] = parseFloat(document.getElementById(_id).value);                                        
 						}
 					}
-					
-					function _det(M) {
-					   if (M.length==2) { return (M[0][0]*M[1][1])-(M[0][1]*M[1][0]); }
-					   var answer = 0;
-					   for (var i=0; i<M.length; i++) { answer += Math.pow(-1,i)*M[0][i]*_det(deleteRowAndColumn(M,i)); }
-					   return answer;
-					}
-
-					function deleteRowAndColumn(M,index) {
-					   var temp = [];
-					   // copy the array first
-					   for (var i=0; i<M.length; i++) { temp.push(M[i].slice(0)); } 
-					   // delete the first row
-					   temp.splice(0,1); 
-					   // delete the column at the index specified
-					   for (var i=0; i<temp.length; i++) { temp[i].splice(index,1); } 
-					   return temp;
-					}
 
 					document.getElementById("t_3_" + 0 + "_" + 0).value = _det(A);
 					break;
@@ -342,6 +324,25 @@ function det()
 		else
 			err("O tamanho da matriz nao pode ser 0");
 	}
+}
+
+function _det(M) {
+	if (M.length == 1) { return (M[0][0]); }
+	if (M.length==2) { return (M[0][0]*M[1][1])-(M[0][1]*M[1][0]); }
+	var answer = 0;
+	for (var i=0; i<M.length; i++) { answer += Math.pow(-1,i)*M[0][i]*_det(deleteRowAndColumn(M,i)); }
+	return answer;
+}
+
+function deleteRowAndColumn(M,index) {
+   var temp = [];
+   // copy the array first
+   for (var i=0; i<M.length; i++) { temp.push(M[i].slice(0)); } 
+   // delete the first row
+   temp.splice(0,1); 
+   // delete the column at the index specified
+   for (var i=0; i<temp.length; i++) { temp[i].splice(index,1); } 
+   return temp;
 }
 
 function inversa()
@@ -363,14 +364,14 @@ function inversa()
 				case 1:
 					err("Essa matriz nao possui inversa");
 					break;
-				case 2:
+				case -2:
 					var old_det_id = document.getElementById("det_id").value;
 					document.getElementById("det_id").value = id;
 					det();
 					document.getElementById("det_id").value = old_det_id;
-					var _det = document.getElementById("t_3_" + 0 + "_" + 0).value;
+					var __det = document.getElementById("t_3_" + 0 + "_" + 0).value;
 					
-					if(_det == 0)
+					if(__det == 0)
 						err("Essa matriz nao possui inversa");
 					else
 					{
@@ -389,18 +390,85 @@ function inversa()
 						document.getElementById("t_3_" + 1 + "_" + 1).value = d;
 					}
 					break;
-				case 3:
-					var a11 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 0).value);
-					var a12 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 1).value);
-					var a13 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 2).value);
-					var a21 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 0).value);
-					var a22 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 1).value);
-					var a23 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 2).value);
-					var a31 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 0).value);
-					var a32 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 1).value);
-					var a33 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 2).value);
 				default:
-					err("Nao e possivel calcular a inversa de matrizes com tamanho superior a 3x3");
+					var old_det_id = document.getElementById("det_id").value;
+					document.getElementById("det_id").value = id;
+					det();
+					document.getElementById("det_id").value = old_det_id;
+					var __det = document.getElementById("t_3_" + 0 + "_" + 0).value;
+					
+					if(__det == 0)
+						err("Essa matriz nao possui inversa");
+					else
+					{
+						var C = [];     //generates the array
+						for (var i = 0; i < m.width; i++)
+						{
+							C[i] = [];
+							for (var j = 0; j < m.height; j++)
+							{                       
+								C[i][j] =  i + ':' + j;             
+							}
+						}
+						var R = [];     //generates the array
+						for (var i = 0; i < m.width; i++)
+						{
+							R[i] = [];
+							for (var j = 0; j < m.height; j++)
+							{                       
+								R[i][j] =  i + ':' + j;             
+							}
+						}
+						var A = [];     //generates the array
+						for (var i = 0; i < m.width; i++)
+						{
+							A[i] = [];
+							for (var j = 0; j < m.height; j++)
+							{                       
+								A[i][j] =  i + ':' + j;             
+							}
+						}           
+
+						for (var i = 0; i < m.width; i++)
+						{  
+							//reads the array
+							for (var j=0; j<m.height; j++)
+							{
+								var _id = "t_" + id + "_" + i + "_" + j;
+								//console.log(_id);
+								A[i][j] = parseFloat(document.getElementById(_id).value);                                        
+							}
+						}
+						
+						for (var i = 0; i < m.width; i++)
+						{
+							for (var j = 0; j < m.height; j++)
+							{
+								C[j][i] = cofator(i,j,A);
+							}
+						}
+						
+						var fact = 1 / _det(A);
+						
+						for(var i=0; i<A.length; i++)
+						{
+							for(var j=0; j<A[i].length; j++)
+							{
+								R[i][j] = fact * C[i][j];
+							}
+						}
+						
+						changeTableSize('3', new matrix_size(R.length,R.length));
+						
+						for(var i=0; i<R.length; i++)
+						{
+							for(var j=0; j<R[i].length; j++)
+							{
+								var _id = "t_3_" + i + "_" + j;
+								document.getElementById(_id).value = R[i][j];
+							}
+						}
+					}
 					break;
 			}
 			DrawAllMatrix();
@@ -408,6 +476,39 @@ function inversa()
 		else
 			err("O tamanho da matriz nao pode ser 0");
 	}
+}
+
+function menorPrincipal(_i,_j,M)
+{
+	var A = [];
+	for (var i = 0; i < M.length - 1; i++)
+	{
+		A[i] = [];
+		for (var j = 0; j < M[i].length - 1; j++)
+		{                       
+			A[i][j] =  i + ':' + j;             
+		}
+	}      
+	for (var i = 0; i < M.length; i++)
+	{
+		if(i != _i)
+		{
+			for (var j = 0; j < M[i].length; j++)
+			{
+				if(j != _j)
+				{
+					A[i > _i ? i - 1 : i][j > _j ? j - 1 : j] = M[i][j];
+				}
+			}
+		}
+	}
+	return _det(A);
+}
+
+function cofator(i,j, M)
+{
+	var r = Math.pow(-1,i+j) * menorPrincipal(i,j,M);
+	return r == -0 ? 0 : r;
 }
 
 function err(str)
