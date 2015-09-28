@@ -64,21 +64,103 @@
 				</td>
 			</tr>
 		</table>
+		
+		<br>
+		
 		<button onclick = "sum();">Somar</button> <!-- Chama a função -->
 		<button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
 		<button onclick = "if(m1.width==1 && m1.height == 1){multE();}else{mult();}">Multiplicar</button> <!-- Chama a função -->
-		<select id="transposta_id">
-		  <option value="1">Matriz 1</option>
-		  <option value="2">Matriz 2</option>
-		</select><button onclick = "transp()">Transposta</button> <!-- Chama a função -->
-		<select id="det_id">
-		  <option value="1">Matriz 1</option>
-		  <option value="2">Matriz 2</option>
-		</select><button onclick = "det()">Determinante</button> <!-- Chama a função -->
-		<select id="inversa_id">
-		  <option value="1">Matriz 1</option>
-		  <option value="2">Matriz 2</option>
-		</select><button onclick = "inversa()">Inversa</button> <!-- Chama a função -->
+		<table style = "display:inline">
+			<tr>
+				<td>
+					<center>
+						<select id="transposta_id">
+						  <option value="1">Matriz 1</option>
+						  <option value="2">Matriz 2</option>
+						</select>
+					</center>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<button onclick = "transp()">Transposta</button> <!-- Chama a função -->
+					</center>
+				</td>
+			</tr>
+		</table>
+		<table style = "display:inline">
+			<tr>
+				<td>
+					<center>
+						<select id="det_id">
+						  <option value="1">Matriz 1</option>
+						  <option value="2">Matriz 2</option>
+						</select>
+					</center>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<button onclick = "det()">Determinante</button> <!-- Chama a função -->
+					</center>
+				</td>
+			</tr>
+		</table>
+		<table style = "display:inline">
+			<tr>
+				<td>
+					<center>
+						<select id="inversa_id">
+						  <option value="1">Matriz 1</option>
+						  <option value="2">Matriz 2</option>
+						</select>
+					</center>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<button onclick = "inversa()">Inversa</button> <!-- Chama a função -->
+					</center>
+				</td>
+			</tr>
+		</table>
+		<table style = "display:inline; margin-left:88px">
+			<tr>
+				<td>
+					<center>
+						<a style = "font-size:22px">Lei de formação: </a>
+					</center>
+				</td>
+			</tr><tr>
+				<td>
+					<center>
+						<a>Destino: </a>		
+						<select id="lei_de_formacao_id">
+						  <option value="1">Matriz 1</option>
+						  <option value="2">Matriz 2</option>
+						</select>
+					</center>
+				</td>
+			</tr><tr>
+				<td>
+					<input id = "lei_de_formacao_width" placeholder = "# de linhas" style = "width:84;"></input>
+					<input id = "lei_de_formacao_height" placeholder = "# de colunas" style = "width:85;"></input>
+				</td>
+			</tr><tr>
+				<td>
+					<input id = "lei_de_formacao_code" placeholder = "Digite aqui a lei de formação"></input>
+				</td>
+			</tr><tr>
+				<td>
+					<center>
+						<button onclick = "gerarLeiDeFormacao()">Gerar</button>
+					</center>
+				</td>
+			</tr>
+		</table>
 	</body>
 </html>
 
@@ -286,65 +368,70 @@ function det()
 	if(id == 1 || id == 2)
 	{
 		var m = id == 1 ? m1 : m2;
-		if(m.width != 0 && m.height != 0 && m.width == m.height)
+		if(m.width != 0 && m.height != 0)
 		{
-			//Preenche todos os espaços vazios com 0
-			replaceNulls('1');
-			replaceNulls('2');
-			//Alterar o tamanho da matriz resultado (3)
-			changeTableSize('3', new matrix_size(1,1));
-			
-			switch(m.width)
+			if(m.width == m.height)
 			{
-				case 1:
-					var b = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
-					document.getElementById("t_3_" + 0 + "_" + 0).value = b.value;
-					break;
-				case 2:
-					var a = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
-					var b = document.getElementById("t_" + id + "_" + 1 + "_" + 1);
-					var c = document.getElementById("t_" + id + "_" + 0 + "_" + 1);
-					var d = document.getElementById("t_" + id + "_" + 1 + "_" + 0);
-					document.getElementById("t_3_" + 0 + "_" + 0).value = parseInt(a.value) * parseInt(b.value) - parseInt(c.value) * parseInt(d.value);
-					break;
-				case 3:
-					var a11 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 0).value);
-					var a12 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 1).value);
-					var a13 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 2).value);
-					var a21 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 0).value);
-					var a22 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 1).value);
-					var a23 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 2).value);
-					var a31 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 0).value);
-					var a32 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 1).value);
-					var a33 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 2).value);
-					document.getElementById("t_3_" + 0 + "_" + 0).value = (a11 * a22 * a33 + a12 * a23 * a31 + a13 * a21 * a32) - (a13 * a22 * a31 + a11 * a23 * a32 + a12 * a21 * a33);
-					break;
-				default:					
-					var A = [];     //generates the array
-					for (var i = 0; i < m.width; i++)
-					{
-						A[i] = [];
-						for (var j = 0; j < m.height; j++)
-						{                       
-							A[i][j] =  i + ':' + j;             
-						}
-					}           
-
-					for (var i = 0; i < m.width; i++)
-					{  
-						//reads the array
-						for (var j=0; j<m.height; j++)
+				//Preenche todos os espaços vazios com 0
+				replaceNulls('1');
+				replaceNulls('2');
+				//Alterar o tamanho da matriz resultado (3)
+				changeTableSize('3', new matrix_size(1,1));
+				
+				switch(m.width)
+				{
+					case 1:
+						var b = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
+						document.getElementById("t_3_" + 0 + "_" + 0).value = b.value;
+						break;
+					case 2:
+						var a = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
+						var b = document.getElementById("t_" + id + "_" + 1 + "_" + 1);
+						var c = document.getElementById("t_" + id + "_" + 0 + "_" + 1);
+						var d = document.getElementById("t_" + id + "_" + 1 + "_" + 0);
+						document.getElementById("t_3_" + 0 + "_" + 0).value = parseInt(a.value) * parseInt(b.value) - parseInt(c.value) * parseInt(d.value);
+						break;
+					case 3:
+						var a11 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 0).value);
+						var a12 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 1).value);
+						var a13 = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + 2).value);
+						var a21 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 0).value);
+						var a22 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 1).value);
+						var a23 = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + 2).value);
+						var a31 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 0).value);
+						var a32 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 1).value);
+						var a33 = parseInt(document.getElementById("t_" + id + "_" + 2 + "_" + 2).value);
+						document.getElementById("t_3_" + 0 + "_" + 0).value = (a11 * a22 * a33 + a12 * a23 * a31 + a13 * a21 * a32) - (a13 * a22 * a31 + a11 * a23 * a32 + a12 * a21 * a33);
+						break;
+					default:					
+						var A = [];     //generates the array
+						for (var i = 0; i < m.width; i++)
 						{
-							var _id = "t_" + id + "_" + i + "_" + j;
-							//console.log(_id);
-							A[i][j] = parseFloat(document.getElementById(_id).value);                                        
-						}
-					}
+							A[i] = [];
+							for (var j = 0; j < m.height; j++)
+							{                       
+								A[i][j] =  i + ':' + j;             
+							}
+						}           
 
-					document.getElementById("t_3_" + 0 + "_" + 0).value = _det(A);
-					break;
+						for (var i = 0; i < m.width; i++)
+						{  
+							//reads the array
+							for (var j=0; j<m.height; j++)
+							{
+								var _id = "t_" + id + "_" + i + "_" + j;
+								//console.log(_id);
+								A[i][j] = parseFloat(document.getElementById(_id).value);                                        
+							}
+						}
+
+						document.getElementById("t_3_" + 0 + "_" + 0).value = _det(A);
+						break;
+				}
+				DrawAllMatrix();
 			}
-			DrawAllMatrix();
+			else
+				err("A matriz precisa ser quadrada");
 		}
 		else
 			err("O tamanho da matriz nao pode ser 0");
@@ -580,6 +667,130 @@ function alterTable(id)
 		}			
 		changeTableSize(id, new matrix_size(i_m, j_m));
 	}
+}
+
+function gerarLeiDeFormacao()
+{
+	var id = document.getElementById("lei_de_formacao_id").value;
+	var w = document.getElementById("lei_de_formacao_width").value;
+	var h = document.getElementById("lei_de_formacao_height").value;
+	var code = document.getElementById("lei_de_formacao_code").value;
+	
+	var checkSize = new RegExp("[0-9]");
+	var checkCode = new RegExp("^[0-9|i|j|\\s|/+|/*|\/|\-]*$");
+	
+	if(checkSize.test(w) && checkSize.test(h))
+	{
+		w=parseInt(w);
+		h=parseInt(h);
+		if(checkCode.test(code))
+		{
+			if(id == "1")
+				m1 = new matrix_size(w,h);
+			else
+				m2 = new matrix_size(w,h);
+			changeTableSize(id,new matrix_size(w,h));
+			for(var i=0; i<w; i++)
+			{
+				for(var j=0; j<h; j++)
+				{
+					var result_total = 0;
+					if(IndexOfAny(code, ["+","-","*","/"] == -1))
+						code += " + 0";
+					if(code.indexOf("+") != -1)
+					{
+						var _s = code.split("+");
+						result_total = 0;
+						for(var s=0; s<_s.length; s++)
+						{
+							_s[s] = (_s[s]+"").trim();
+							var x = _s[s].indexOf("i");
+							if(x != -1)
+								result_total += _s[s].length == 1 ? i+1 : parseInt(_s[s].substring(0,x)) * (i+1);
+							x = _s[s].indexOf("j");
+							if(x != -1)
+								result_total += _s[s].length == 1 ? j+1 : parseInt(_s[s].substring(0,x)) * (j+1);
+							if(_s[s].indexOf("j") == -1 && _s[s].indexOf("i") == -1)
+								result_total += parseInt(_s[s]);
+						}
+					}
+					else if(code.indexOf("-") != -1)
+					{
+						var _s = code.split("-");
+						result_total = 0;
+						for(var s=0; s<_s.length; s++)
+						{
+							_s[s] = (_s[s]+"").trim();
+							var x = _s[s].indexOf("i");
+							if(x != -1)
+								result_total -= _s[s].length == 1 ? i+1 : parseInt(_s[s].substring(0,x)) * (i+1);
+							x = _s[s].indexOf("j");
+							if(x != -1)
+								result_total -= _s[s].length == 1 ? j+1 : parseInt(_s[s].substring(0,x)) * (j+1);
+							if(_s[s].indexOf("j") == -1 && _s[s].indexOf("i") == -1)
+								result_total -= parseInt(_s[s]);
+						}
+					}
+					else if(code.indexOf("*") != -1)
+					{
+						var _s = code.split("*");
+						result_total = 1;
+						for(var s=0; s<_s.length; s++)
+						{
+							_s[s] = (_s[s]+"").trim();
+							var x = _s[s].indexOf("i");
+							if(x != -1)
+								result_total *= _s[s].length == 1 ? i+1 : parseInt(_s[s].substring(0,x)) * (i+1);
+							x = _s[s].indexOf("j");
+							if(x != -1)
+								result_total *= _s[s].length == 1 ? j+1 : parseInt(_s[s].substring(0,x)) * (j+1);
+							if(_s[s].indexOf("j") == -1 && _s[s].indexOf("i") == -1)
+								result_total *= parseInt(_s[s]);
+						}
+					}
+					else if(code.indexOf("/") != -1)
+					{
+						var _s = code.split("/");
+						result_total = 0;
+						for(var s=0; s<_s.length; s++)
+						{
+							_s[s] = (_s[s]+"").trim();
+							var x = _s[s].indexOf("i");
+							var rr = 0;
+							if(x != -1)
+								rr = _s[s].length == 1 ? i+1 : parseInt(_s[s].substring(0,x)) * (i+1);
+							x = _s[s].indexOf("j");
+							if(x != -1)
+								rr = _s[s].length == 1 ? j+1 : parseInt(_s[s].substring(0,x)) * (j+1);
+							if(_s[s].indexOf("j") == -1 && _s[s].indexOf("i") == -1)
+								rr = parseInt(_s[s]);
+							if(rr != 0 && result_total == 0)
+								result_total = rr;
+							else
+								result_total/=rr;
+						}
+					}
+					else
+					{
+						code = code.trim();
+						result_total = parseInt(code);
+					}
+					
+					var _input = document.getElementById("t_" + id + "_" + i + "_" + j);
+					_input.value = result_total;
+					if(_input.value == "NaN")
+						err("Não foi possível gerar a matriz. Por favor verifique a sintaxe da lei de formação");
+					else
+						err("");
+				}
+			}
+		}
+		else
+			err("A lei de formação não é válida");
+	}
+	else
+		err("Digite valores válidos para largura e altura");
+	UpdateDrawInfo();
 }
 
 //Função para alterar o tamanho de uma tabela (<id da tabela>, <tamanho>). ID da tabela (1,2,3 -> matriz 1, matriz 2, matriz resultado).
