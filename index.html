@@ -1,61 +1,86 @@
-<div id = "err"></div><br>
-<table class="outer">
-	<tr class="outer">
-		<th class="outer"><h3 style="color:#F00">Matriz 1</h3></th>
-		<th class="outer"><h3 style="color:#00F">Matriz 2</h3></th>
-		<th class="outer"><h3 style="color:#0F0">Resultado</h3></th>
-	</tr>
-	<tr class="outer"  style = "display : none">
-		<td>
-			<center>
-				<table id = "tabela_matriz_1" style = "display:none;"></table>
-			</center>
-		</td>
-		<td>
-			<center>
-				<table id = "tabela_matriz_2" style = "display:none;"></table>
-			</center>
-		</td>
-		<td>
-			<center>
-				<table id = "tabela_matriz_3" style = "display:none;"></table>
-			</center>
-		</td>
-	</tr>
-	<tr class="outer">
-		<td class = "outer">
-			<br>
-			<input id="linha_amount_1" placeholder = "# de linhas" style = "width:90;vertical-align:bottom;">
-			<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
-			<button onclick = "alterTable('1');">Alterar</button>
-		</td>
-		<td class = "outer">
-			<br>
-			<input id="linha_amount_2" placeholder = "# de linhas" style = "width:90;vertical-align:bottom;">
-			<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;vertical-align:bottom;">
-			<button onclick = "alterTable('2');">Alterar</button>
-		</td>
-		<td class = "outer">
-			<canvas id="display">
-			</canvas>
-		</td>
-	</tr>
-</table>
-<button onclick = "sum();">Somar</button> <!-- Chama a função -->
-<button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
-<button onclick = "if(m1.width==1 && m1.height == 1){multE();}else{mult();}">Multiplicar</button> <!-- Chama a função -->
-<select id="transposta_id">
-  <option value="1">Matriz 1</option>
-  <option value="2">Matriz 2</option>
-</select><button onclick = "transp()">Transposta</button> <!-- Chama a função -->
-<select id="det_id">
-  <option value="1">Matriz 1</option>
-  <option value="2">Matriz 2</option>
-</select><button onclick = "det()">Determinante</button> <!-- Chama a função -->
-<select id="inversa_id">
-  <option value="1">Matriz 1</option>
-  <option value="2">Matriz 2</option>
-</select><button onclick = "inversa()">Inversa</button> <!-- Chama a função -->
+<HTML>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<head>
+		<title>
+			Calculadora de Matrizes
+		</title>
+	</head>
+	<body>
+		<div id = "err"></div><br>
+		<table class="outer">
+			<tr class="outer">
+				<th class="outer" style = "vertical-align:center;">
+					<a style="color:#F00; font-size:22px;">Matriz 1</a><br>
+					<a style="color:#000; font-size:12px;" id = "m1_info">Tem inversa: NÃO | É simétrica: SIM</a>
+				</th>
+				<th class="outer" style = "vertical-align:center;">
+					<a style="color:#00F; font-size:22px;">Matriz 2</a><br>
+					<a style="color:#000; font-size:12px;" id = "m2_info">Tem inversa: NÃO | É simétrica: SIM</a>
+				</th>
+				<th class="outer" style = "vertical-align:center;">
+					<a style="color:#0A0; font-size:22px;">Matriz Resultado</a><br>
+					<a style="color:#000; font-size:12px;" id = "m3_info">Tem inversa: NÃO | É simétrica: SIM</a>
+				</th>
+			</tr>
+			<tr class="outer"  style = "display : none">
+				<td>
+					<center>
+						<table id = "tabela_matriz_1" style = "display:none;"></table>
+					</center>
+				</td>
+				<td>
+					<center>
+						<table id = "tabela_matriz_2" style = "display:none;"></table>
+					</center>
+				</td>
+				<td>
+					<center>
+						<table id = "tabela_matriz_3" style = "display:none;"></table>
+					</center>
+				</td>
+			</tr>
+			<tr class="outer">
+				<td class = "outer" style = "vertical-align:bottom">
+					<center>
+						<div style = "margin:5 5 5 5">
+							<input id="linha_amount_1" placeholder = "# de linhas" style = "width:90;">
+							<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;">
+							<button onclick = "alterTable('1');">Alterar</button>
+						</div>
+					</center>
+				</td>
+				<td class = "outer" style = "vertical-align:bottom">
+					<center>
+						<div style = "margin:5 5 5 5">
+							<input id="linha_amount_2" placeholder = "# de linhas" style = "width:90;">
+							<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;">
+							<button onclick = "alterTable('2');">Alterar</button>
+						</div>
+					</center>
+				</td>
+				<td class = "outer">
+					<canvas id="display">
+					</canvas>
+				</td>
+			</tr>
+		</table>
+		<button onclick = "sum();">Somar</button> <!-- Chama a função -->
+		<button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
+		<button onclick = "if(m1.width==1 && m1.height == 1){multE();}else{mult();}">Multiplicar</button> <!-- Chama a função -->
+		<select id="transposta_id">
+		  <option value="1">Matriz 1</option>
+		  <option value="2">Matriz 2</option>
+		</select><button onclick = "transp()">Transposta</button> <!-- Chama a função -->
+		<select id="det_id">
+		  <option value="1">Matriz 1</option>
+		  <option value="2">Matriz 2</option>
+		</select><button onclick = "det()">Determinante</button> <!-- Chama a função -->
+		<select id="inversa_id">
+		  <option value="1">Matriz 1</option>
+		  <option value="2">Matriz 2</option>
+		</select><button onclick = "inversa()">Inversa</button> <!-- Chama a função -->
+	</body>
+</html>
 
 <style>
 .outer,table{
