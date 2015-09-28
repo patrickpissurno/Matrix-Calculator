@@ -65,8 +65,8 @@
 										</div>
 									</center>
 								</td>
-								<td class = "outer">
-									<canvas id="display">
+								<td class = "outer" style = "background-color : #333">
+									<canvas id="display" style = "background-color : #333;">
 									</canvas>
 								</td>
 							</tr>
@@ -357,7 +357,8 @@ function transp()
 			replaceNulls('1');
 			replaceNulls('2');
 			//Alterar o tamanho da matriz resultado (3)
-			changeTableSize('3',id == 1 ? m1 : m2);
+			var m = id == 1 ? m1 : m2;
+			changeTableSize('3', new matrix_size(m.height,m.width));
 			for(var i=0; i<(id == 1 ? m1 : m2).width; i++)	//i=0; i<linhas; i++
 			{
 				for(var j=0; j<(id == 1 ? m1 : m2).height; j++)	//z=0; i<linhas; z++
@@ -868,6 +869,8 @@ function UpdateDrawInfo()
 		
 		var empty = m.width <= 0 && m.height <= 0 || !CheckInput(id);
 		document.getElementById("m" + id + "_info").innerText = "Tem inversa: " + (empty ? "?" : (_det(A) == 0 ? "NÃO" : "SIM")) + " | É simétrica: " + (empty ? "?" : (IsEqual(A) ? "SIM" : "NÃO"));
+		
+		DrawAllMatrix(1);
 	}
 	function IsEqual(M)
 	{
@@ -875,8 +878,15 @@ function UpdateDrawInfo()
 		{  
 			for (var j=0; j< M[i].length; j++)
 			{
-				if(M[j][i] != M[i][j])
+				try
+				{
+					if(M[j][i] != M[i][j])
+						return false;
+				}
+				catch(err)
+				{
 					return false;
+				}
 			}
 		}
 		return true;
@@ -929,20 +939,36 @@ function IndexOfAny(str, arr)
 }
 
 //Desenha todas as matrizes
-function DrawAllMatrix()
+function DrawAllMatrix(update)
 {
-	UpdateDrawInfo();
-	err("");
+	if(update != 1)
+		err("");
 	ctx.clearRect(0,0,canvas.width,canvas.height);
-	DrawMatrix("1", "#F00");
-	DrawMatrix("2", "#00F");
-	DrawMatrix("3", "#0F0");
+	ctx.fillStyle="#333";
+	ctx.fillRect(0,0,canvas.width,canvas.height);
+	
+	ctx.beginPath();
+	ctx.moveTo(canvas.width/2,0);
+	ctx.lineTo(canvas.width/2, canvas.height);
+	ctx.strokeStyle = "#FFF";
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.moveTo(0, canvas.height/2);
+	ctx.lineTo(canvas.width, canvas.height/2);
+	ctx.strokeStyle = "#FFF";
+	ctx.stroke();
+	
+	DrawMatrix("1", "#F00", update);
+	DrawMatrix("2", "#00F", update);
+	DrawMatrix("3", "#0F0", update);
 }
 
 //Desenha uma matriz. (<ID da matriz>,<cor>)
-function DrawMatrix(id, color)
+function DrawMatrix(id, color, update)
 {
-	replaceNulls(""+id);
+	if(update != 1)
+		replaceNulls(""+id);
 	try
 	{
 		switch(id+"")
@@ -975,10 +1001,10 @@ function DrawMatrix(id, color)
 
 function DrawLine(point1, point2, color)
 {
-	var scale_factor = 30;
+	var scale_factor = 10;
 	ctx.beginPath();
-	ctx.moveTo(point1.x * scale_factor,point1.y * scale_factor);
-	ctx.lineTo(point2.x * scale_factor, point2.y * scale_factor);
+	ctx.moveTo(point1.x * scale_factor + canvas.width/2,point1.y * scale_factor + canvas.height/2);
+	ctx.lineTo(point2.x * scale_factor + canvas.width/2, point2.y * scale_factor + canvas.height/2);
 	ctx.strokeStyle = color;
 	ctx.stroke();
 }
