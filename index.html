@@ -6,161 +6,176 @@
 		</title>
 	</head>
 	<body>
-		<div id = "err"></div><br>
-		<table class="outer">
-			<tr class="outer">
-				<th class="outer" style = "vertical-align:center;">
-					<a style="color:#F00; font-size:22px;">Matriz 1</a><br>
-					<a style="color:#000; font-size:12px;" id = "m1_info">Tem inversa: ? | É simétrica: ?</a>
-				</th>
-				<th class="outer" style = "vertical-align:center;">
-					<a style="color:#00F; font-size:22px;">Matriz 2</a><br>
-					<a style="color:#000; font-size:12px;" id = "m2_info">Tem inversa: ? | É simétrica: ?</a>
-				</th>
-				<th class="outer" style = "vertical-align:center;">
-					<a style="color:#0A0; font-size:22px;">Matriz Resultado</a><br>
-					<a style="color:#000; font-size:12px;" id = "m3_info">Tem inversa: ? | É simétrica: ?</a>
-				</th>
-			</tr>
-			<tr class="outer"  style = "display : none">
-				<td>
-					<center>
-						<table id = "tabela_matriz_1" style = "display:none;"></table>
-					</center>
-				</td>
-				<td>
-					<center>
-						<table id = "tabela_matriz_2" style = "display:none;"></table>
-					</center>
-				</td>
-				<td>
-					<center>
-						<table id = "tabela_matriz_3" style = "display:none;"></table>
-					</center>
-				</td>
-			</tr>
-			<tr class="outer">
-				<td class = "outer" style = "vertical-align:bottom">
-					<center>
-						<div style = "margin:5 5 5 5">
-							<input id="linha_amount_1" placeholder = "# de linhas" style = "width:90;">
-							<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;">
-							<button onclick = "alterTable('1');">Alterar</button>
+		<center>
+			<table style = "vertical-align:center; height:100%">
+				<tr>
+					<td>
+						<center>
+							<a style="text-align:center;font-size:40px;">Calculadora de Matrizes</a>
+						</center>
+						<div id = "err" style = "font-color:#F00; text-align:center;"></div><br>
+						<table class="outer">
+							<tr class="outer">
+								<th class="outer" style = "vertical-align:center;">
+									<a style="color:#F00; font-size:22px;">Matriz 1</a><br>
+									<a style="color:#000; font-size:12px;" id = "m1_info">Tem inversa: ? | É simétrica: ?</a>
+								</th>
+								<th class="outer" style = "vertical-align:center;">
+									<a style="color:#00F; font-size:22px;">Matriz 2</a><br>
+									<a style="color:#000; font-size:12px;" id = "m2_info">Tem inversa: ? | É simétrica: ?</a>
+								</th>
+								<th class="outer" style = "vertical-align:center;">
+									<a style="color:#0A0; font-size:22px;">Matriz Resultado</a><br>
+									<a style="color:#000; font-size:12px;" id = "m3_info">Tem inversa: ? | É simétrica: ?</a>
+								</th>
+							</tr>
+							<tr class="outer"  style = "display : none">
+								<td>
+									<center>
+										<table id = "tabela_matriz_1" style = "display:none;"></table>
+									</center>
+								</td>
+								<td>
+									<center>
+										<table id = "tabela_matriz_2" style = "display:none;"></table>
+									</center>
+								</td>
+								<td>
+									<center>
+										<table id = "tabela_matriz_3" style = "display:none;"></table>
+									</center>
+								</td>
+							</tr>
+							<tr class="outer">
+								<td class = "outer" style = "vertical-align:bottom">
+									<center>
+										<div style = "margin:5 5 5 5">
+											<input id="linha_amount_1" placeholder = "# de linhas" style = "width:90;">
+											<input id="coluna_amount_1" placeholder = "# de colunas" style = "width:90;">
+											<button onclick = "alterTable('1');">Alterar</button>
+										</div>
+									</center>
+								</td>
+								<td class = "outer" style = "vertical-align:bottom">
+									<center>
+										<div style = "margin:5 5 5 5">
+											<input id="linha_amount_2" placeholder = "# de linhas" style = "width:90;">
+											<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;">
+											<button onclick = "alterTable('2');">Alterar</button>
+										</div>
+									</center>
+								</td>
+								<td class = "outer">
+									<canvas id="display">
+									</canvas>
+								</td>
+							</tr>
+						</table>
+						
+						<br>
+						
+						<button onclick = "sum();">Somar</button> <!-- Chama a função -->
+						<button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
+						<button onclick = "if(m1.width==1 && m1.height == 1){multE();}else{mult();}">Multiplicar</button> <!-- Chama a função -->
+						<table style = "display:inline">
+							<tr>
+								<td>
+									<center>
+										<select id="transposta_id">
+										  <option value="1">Matriz 1</option>
+										  <option value="2">Matriz 2</option>
+										</select>
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<center>
+										<button onclick = "transp()">Transposta</button> <!-- Chama a função -->
+									</center>
+								</td>
+							</tr>
+						</table>
+						<table style = "display:inline">
+							<tr>
+								<td>
+									<center>
+										<select id="det_id">
+										  <option value="1">Matriz 1</option>
+										  <option value="2">Matriz 2</option>
+										</select>
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<center>
+										<button onclick = "det()">Determinante</button> <!-- Chama a função -->
+									</center>
+								</td>
+							</tr>
+						</table>
+						<table style = "display:inline">
+							<tr>
+								<td>
+									<center>
+										<select id="inversa_id">
+										  <option value="1">Matriz 1</option>
+										  <option value="2">Matriz 2</option>
+										</select>
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<center>
+										<button onclick = "inversa()">Inversa</button> <!-- Chama a função -->
+									</center>
+								</td>
+							</tr>
+						</table>
+						<table style = "display:inline; margin-left:88px">
+							<tr>
+								<td>
+									<center>
+										<a style = "font-size:22px">Lei de formação: </a>
+									</center>
+								</td>
+							</tr><tr>
+								<td>
+									<center>
+										<a>Destino: </a>		
+										<select id="lei_de_formacao_id">
+										  <option value="1">Matriz 1</option>
+										  <option value="2">Matriz 2</option>
+										</select>
+									</center>
+								</td>
+							</tr><tr>
+								<td>
+									<input id = "lei_de_formacao_width" placeholder = "# de linhas" style = "width:84;"></input>
+									<input id = "lei_de_formacao_height" placeholder = "# de colunas" style = "width:85;"></input>
+								</td>
+							</tr><tr>
+								<td>
+									<input id = "lei_de_formacao_code" placeholder = "Digite aqui a lei de formação"></input>
+								</td>
+							</tr><tr>
+								<td>
+									<center>
+										<button onclick = "gerarLeiDeFormacao()">Gerar</button>
+									</center>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<div style="width:100%;text-align:right;padding-top:15px">
+							<a style = "font-size:10px">Patrick Pissurno, Breno Ferreira</a>
 						</div>
-					</center>
-				</td>
-				<td class = "outer" style = "vertical-align:bottom">
-					<center>
-						<div style = "margin:5 5 5 5">
-							<input id="linha_amount_2" placeholder = "# de linhas" style = "width:90;">
-							<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;">
-							<button onclick = "alterTable('2');">Alterar</button>
-						</div>
-					</center>
-				</td>
-				<td class = "outer">
-					<canvas id="display">
-					</canvas>
-				</td>
-			</tr>
-		</table>
-		
-		<br>
-		
-		<button onclick = "sum();">Somar</button> <!-- Chama a função -->
-		<button onclick = "sub();">Subtrair</button> <!-- Chama a função -->
-		<button onclick = "if(m1.width==1 && m1.height == 1){multE();}else{mult();}">Multiplicar</button> <!-- Chama a função -->
-		<table style = "display:inline">
-			<tr>
-				<td>
-					<center>
-						<select id="transposta_id">
-						  <option value="1">Matriz 1</option>
-						  <option value="2">Matriz 2</option>
-						</select>
-					</center>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<center>
-						<button onclick = "transp()">Transposta</button> <!-- Chama a função -->
-					</center>
-				</td>
-			</tr>
-		</table>
-		<table style = "display:inline">
-			<tr>
-				<td>
-					<center>
-						<select id="det_id">
-						  <option value="1">Matriz 1</option>
-						  <option value="2">Matriz 2</option>
-						</select>
-					</center>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<center>
-						<button onclick = "det()">Determinante</button> <!-- Chama a função -->
-					</center>
-				</td>
-			</tr>
-		</table>
-		<table style = "display:inline">
-			<tr>
-				<td>
-					<center>
-						<select id="inversa_id">
-						  <option value="1">Matriz 1</option>
-						  <option value="2">Matriz 2</option>
-						</select>
-					</center>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<center>
-						<button onclick = "inversa()">Inversa</button> <!-- Chama a função -->
-					</center>
-				</td>
-			</tr>
-		</table>
-		<table style = "display:inline; margin-left:88px">
-			<tr>
-				<td>
-					<center>
-						<a style = "font-size:22px">Lei de formação: </a>
-					</center>
-				</td>
-			</tr><tr>
-				<td>
-					<center>
-						<a>Destino: </a>		
-						<select id="lei_de_formacao_id">
-						  <option value="1">Matriz 1</option>
-						  <option value="2">Matriz 2</option>
-						</select>
-					</center>
-				</td>
-			</tr><tr>
-				<td>
-					<input id = "lei_de_formacao_width" placeholder = "# de linhas" style = "width:84;"></input>
-					<input id = "lei_de_formacao_height" placeholder = "# de colunas" style = "width:85;"></input>
-				</td>
-			</tr><tr>
-				<td>
-					<input id = "lei_de_formacao_code" placeholder = "Digite aqui a lei de formação"></input>
-				</td>
-			</tr><tr>
-				<td>
-					<center>
-						<button onclick = "gerarLeiDeFormacao()">Gerar</button>
-					</center>
-				</td>
-			</tr>
-		</table>
+					</td>
+				</tr>
+			</table>
+		</center>
 	</body>
 </html>
 
