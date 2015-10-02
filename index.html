@@ -212,8 +212,7 @@
 											</center>
 										</div>
 										<div id = "escala_div" style = "display:none">
-											<input id = "escala_x" placeholder = "X" style = "width:106;"></input>
-											<input id = "escala_y" placeholder = "Y" style = "width:106;"></input>
+											<input id = "escala_val" placeholder = "Fator de escala" style = "width:216;"></input>
 										</div>
 									</td>
 								</tr><tr>
@@ -272,7 +271,7 @@ function transformacaoChanged()
 	if(a == "2")
 		document.getElementById("destino_id").value = "2";
 	document.getElementById("translacao_div").style.display = a == "1" ? "" : "none";
-	document.getElementById("destino_id").style.display = a != "2" ? "" : "none";
+	document.getElementById("destino_id").style.display = a == "1" ? "" : "none";
 	document.getElementById("rotacao_div").style.display = a == "2" ? "" : "none";
 	document.getElementById("escala_div").style.display = a == "3" ? "" : "none";
 }
@@ -337,6 +336,23 @@ function aplicarTransformacao()
 			break;
 		case "3":
 			//Escala
+			
+			m_t = "2";
+			id = "1";
+			var m = id == "1" ? m1 : m2;
+			
+			replaceNulls(id);
+			document.getElementById("linha_amount_" + id).value = 1;
+			document.getElementById("coluna_amount_" + id).value = 1;
+			alterTable(id);
+			
+			var valA = parseFloat(document.getElementById("escala_val").value);
+			var _00 = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
+			_00.value = valA;
+			
+			UpdateDrawInfo();
+			multE();
+			
 			break;
 	}
 }
