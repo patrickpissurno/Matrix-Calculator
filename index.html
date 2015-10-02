@@ -60,7 +60,7 @@
 											<div style = "margin:5 5 5 5">
 												<input id="linha_amount_2" placeholder = "# de linhas" style = "width:90;">
 												<input id="coluna_amount_2" placeholder = "# de colunas" style = "width:90;">
-												<button onclick = "alterTable('2');">Alterar</button>
+												<button onclick = "document.getElementById('linha_amount_1').value = 2; document.getElementById('coluna_amount_1').value = 2;alterTable('1');alterTable('2');">Alterar</button>
 											</div>
 										</center>
 									</td>
@@ -179,13 +179,15 @@
 									</td>
 								</tr><tr>
 									<td>
-										<center>
-											<a>Destino: </a>		
-											<select id="transformacao_destino">
-											  <option value="1">Matriz 1</option>
-											  <option value="2">Matriz 2</option>
-											</select>
-										</center>
+										<div id = "destino_id">								
+											<center>
+												<a>Destino: </a>		
+												<select id="transformacao_destino">
+												  <option value="1">Matriz 1</option>
+												  <option value="2">Matriz 2</option>
+												</select>
+											</center>
+										</div>
 									</td>
 								</tr><tr>
 									<td>
@@ -267,7 +269,10 @@ var ctx = canvas.getContext("2d");
 function transformacaoChanged()
 {
 	var a = document.getElementById("transformacao_id").value;
+	if(a == "2")
+		document.getElementById("destino_id").value = "2";
 	document.getElementById("translacao_div").style.display = a == "1" ? "" : "none";
+	document.getElementById("destino_id").style.display = a != "2" ? "" : "none";
 	document.getElementById("rotacao_div").style.display = a == "2" ? "" : "none";
 	document.getElementById("escala_div").style.display = a == "3" ? "" : "none";
 }
@@ -304,11 +309,41 @@ function aplicarTransformacao()
 			break;
 		case "2":
 			//Rotação
+			
+			m_t = "2";
+			id = "1";
+			var m = id == "1" ? m1 : m2;
+			
+			replaceNulls(id);
+			document.getElementById("linha_amount_" + id).value = 2;
+			document.getElementById("coluna_amount_" + id).value = 2;
+			alterTable(id);
+			
+			var rotA = parseFloat(document.getElementById("rotacao_angle").value);
+			//changeTableSize(m_t, m);
+			
+			var _00 = document.getElementById("t_" + id + "_" + 0 + "_" + 0);
+			var _01 = document.getElementById("t_" + id + "_" + 0 + "_" + 1);
+			var _10 = document.getElementById("t_" + id + "_" + 1 + "_" + 0);
+			var _11 = document.getElementById("t_" + id + "_" + 1 + "_" + 1);
+			
+			_00.value = Math.cos(degToRag(rotA));
+			_01.value = -Math.sin(degToRag(rotA));
+			_10.value = Math.sin(degToRag(rotA));
+			_11.value = Math.cos(degToRag(rotA));
+			
+			UpdateDrawInfo();
+			mult();
 			break;
 		case "3":
 			//Escala
 			break;
 	}
+}
+
+function degToRag(d)
+{
+	return d * (Math.PI/180);
 }
 
 function sum()
@@ -403,7 +438,7 @@ function mult()
 				{
 					var a = document.getElementById("t_1_" + i + "_" + j);
 					var b = document.getElementById("t_2_" + j + "_" + z);
-					sum += parseInt(a.value) * parseInt(b.value);
+					sum += parseFloat(a.value) * parseFloat(b.value);
 				}
 				document.getElementById("t_3_" + i + "_" + z).value = sum;
 			}
@@ -1089,7 +1124,7 @@ function DrawMatrix(id, color, update)
 		{
 			var _j = _matrix.height-1;
 			var lastPoint = new Point(parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + _j).value),parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + _j).value));
-			for(var j=0; j<m1.height; j++)
+			for(var j=0; j<_matrix.height; j++)
 			{
 				var x = parseInt(document.getElementById("t_" + id + "_" + 0 + "_" + j).value);
 				var y = parseInt(document.getElementById("t_" + id + "_" + 1 + "_" + j).value);
