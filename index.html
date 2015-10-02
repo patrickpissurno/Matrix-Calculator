@@ -11,8 +11,8 @@
 				<tr>
 					<td>
 						<center>
-							<a style="text-align:center;font-size:40px;">Calculadora de Matrizes</a>
-							<div id = "err" style = "font-color:#F00; text-align:center;"></div><br>
+							<a style="text-align:center;font-size:40px;">Calculadora de Matrizes</a><br>
+							<div id = "err" style = "color:#F00; text-align:center; display:none"></div><br>
 							<table class="outer">
 								<tr class="outer">
 									<th class="outer" style = "vertical-align:center;">
@@ -282,9 +282,26 @@ function aplicarTransformacao()
 	var id = document.getElementById("transformacao_destino").value;
 	var m = id == "1" ? m1 : m2;
 	var m_t = id == "1" ? "2" : "1";
+	var checkVal = new RegExp("^[0-9||\\s|/.|/,]*$");
 	switch(t)
 	{
 		case "1":
+		
+			//VALIDATION
+			var arg1 = document.getElementById("translacao_x").value;
+			var arg2 = document.getElementById("translacao_y").value;
+			if(!(checkVal.test(arg1) && checkVal.test(arg2) && arg1.trim(" ") != "" && arg2.trim(" ") != "" ))
+			{
+				err("Os valores de X e Y não são válidos.");
+				break;
+			}
+			
+			if(m.width == 0 || m.height == 0)
+			{
+				err("A matriz destino não é válida.");
+				break;
+			}
+			
 			//Translação
 			replaceNulls(id);
 			document.getElementById("linha_amount_" + m_t).value = m.width;
@@ -307,8 +324,22 @@ function aplicarTransformacao()
 			sum();
 			break;
 		case "2":
-			//Rotação
+		
+			//VALIDATION
+			var arg1 = document.getElementById("rotacao_angle").value;
+			if(!(checkVal.test(arg1) && arg1.trim(" ") != ""))
+			{
+				err("O valor do ângulo não é válido.");
+				break;
+			}
 			
+			if(m2.width == 0 || m2.height == 0)
+			{
+				err("A matriz 2 (destino) não é válida.");
+				break;
+			}
+			
+			//Rotação
 			m_t = "2";
 			id = "1";
 			var m = id == "1" ? m1 : m2;
@@ -335,8 +366,21 @@ function aplicarTransformacao()
 			mult();
 			break;
 		case "3":
-			//Escala
+			//VALIDATION
+			var arg1 = document.getElementById("escala_val").value;
+			if(!(checkVal.test(arg1) && arg1.trim(" ") != ""))
+			{
+				err("O valor do fator de escala não é válido.");
+				break;
+			}
 			
+			if(m2.width == 0 || m2.height == 0)
+			{
+				err("A matriz 2 (destino) não é válida.");
+				break;
+			}
+		
+			//Escala
 			m_t = "2";
 			id = "1";
 			var m = id == "1" ? m1 : m2;
@@ -796,7 +840,15 @@ function err(str)
 {
 	//error
 	console.log(str);
-	document.getElementById("err").innerText = str;
+	
+	var _err = document.getElementById("err");
+	if(str.trim(" ") == "")
+		_err.style.display = "none";
+	else
+	{
+		_err.style.display = "";
+		_err.innerText = str;
+	}
 }
 
 //Substitui todos os campos vazios por 0
